@@ -2,11 +2,12 @@ const Orders = require('../models/Orders');
 
 exports.createOrder = async (req, res) => {
     try {
-        const { Pid, title } = req.body;
+        const { Pid, title, orderedAt } = req.body;
 
         const newOrder = new Orders({
             Pid,
-            title
+            title,
+            orderedAt: orderedAt || Date.now() // Use current date if not provided
         });
         await newOrder.save();
 
@@ -19,7 +20,7 @@ exports.createOrder = async (req, res) => {
 
 exports.getOrders = async (req, res) => {
     try {
-        const orders = await Orders.find();
+        const orders = await Orders.find().populate('Pid');
         res.status(200).json(orders);
     } catch (error) {
         console.error('Error fetching orders:', error);
