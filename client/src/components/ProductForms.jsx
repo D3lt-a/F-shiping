@@ -22,14 +22,13 @@ function ProductForms({ onProductAdded }) {
                 image: '',
                 description: ''
             });
-            onProductAdded(response.data);
-            console.log('Product created successfully:', response.data);
+            onProductAdded?.();
             alert('Product created successfully');
         } catch (error) {
             console.error('Error creating product:', error);
             alert('Error creating product');
-        }
-    };
+        }}
+
 
     return (
         <div>
@@ -97,4 +96,4 @@ function ProductForms({ onProductAdded }) {
     )
 }
 
-export default ProductForms;
+export default ProductForms

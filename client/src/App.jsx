@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css'
-import ProductForm from './components/ProductForms'
+import ProductForms from './components/ProductForms'
 import ProductCards from './components/ProductCards';
 import ProductInfo from './components/ProductInfo';
 
@@ -25,7 +25,7 @@ function App() {
       </ul>
 
       <div>
-        {tab === 1 && <ProductForm />}
+        {tab === 1 && <ProductForms />}
         {tab === 2 && <ProductCards />}
         {tab === 3 && <ProductInfo />}
       </div>
