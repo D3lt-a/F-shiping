@@ -1,61 +1,63 @@
-import axios from 'axios'
-import React from 'react'
-import { getProducts, deleteProduct } from '../services/api'
+import React from 'react';
+import { getProducts, deleteProduct } from '../services/api';
 
 function ProductCards() {
-    const [products, setProducts] = React.useState([])
+    const [products, setProducts] = React.useState([]);
 
     const fetchProducts = async () => {
         try {
-            const response = await getProducts()
-            setProducts(response.data)
+            const response = await getProducts();
+            setProducts(response.data);
         } catch (error) {
-            alert('Error fetching products')
-            console.error('Error fetching products:', error)
+            alert('Error fetching products');
+            console.error('Error fetching products:', error);
         }
-    }
+    };
 
     React.useEffect(() => {
-        fetchProducts()
-            , []
-    })
+        fetchProducts();
+    }, []); // Correct dependency array placement
 
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this product?')) {
             try {
-                await deleteProduct(id)
-                setProducts(products.filter(product => product._id !== id))
-                alert('Product deleted successfully')
+                await deleteProduct(id);
+                // Use functional update to ensure latest state
+                setProducts((prevProducts) =>
+                    prevProducts.filter((product) => product._id !== id)
+                );
+                alert('Product deleted successfully');
             } catch (error) {
-                alert('Error deleting product')
-                console.error('Error deleting product:', error)
+                alert('Error deleting product');
+                console.error('Error deleting product:', error);
             }
         }
+    };
 
-        return (
-            <div>
-                {/* <div className="text-left max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
-                <a href="#">
-                    <img className="rounded-t-lg" src="https://placehold.co/600x400?text=Product+Image" alt="" />
-                </a>
-                <div className="p-5">
-                    <a href="#">
-                        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy technology acquisitions 2021</h5>
-                    </a>
-                    <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
-                    <a href="#" className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                        Read more
-                        <svg className="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-                        </svg>
-                    </a>
-
-                </div>
-            </div> */}
-
+    return (
+        <div>
+            <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {products.map((product) => (
+                    <div key={product._id} className="bg-white rounded-xl shadow-md p-4 space-y-3">
+                        <img
+                            src={product.image}
+                            alt={product.title}
+                            className="w-full h-48 object-cover rounded-md"
+                        />
+                        <h2 className="text-xl font-bold text-gray-800">{product.title}</h2>
+                        <p className="text-gray-600">{product.description}</p>
+                        <p className="text-blue-600 font-semibold">{product.price}Rwf</p>
+                        <button
+                            onClick={() => handleDelete(product._id)}
+                            className="mt-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md"
+                        >
+                            Delete
+                        </button>
+                    </div>
+                ))}
             </div>
-        )
-    }
+        </div>
+    );
 }
 
-export default ProductCards
+export default ProductCards;
