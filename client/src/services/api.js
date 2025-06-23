@@ -4,6 +4,9 @@ const api = axios.create({
     baseURL: 'http://localhost:3000',
 })
 
+export const login = (credentials) => api.post('/login', credentials);
+export const register = (user) => api.post('/register', user);
+
 export const getProducts = () => api.get('/products/getproducts');
 export const getProduct = (id) => api.get('/products/getproduct/'+id);
 export const createProduct = (product) => api.post('/products/createproduct', product);

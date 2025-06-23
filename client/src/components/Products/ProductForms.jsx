@@ -1,5 +1,5 @@
 import React from 'react'
-import { createProduct } from '../services/api';
+import { createProduct } from '../../services/api';
 
 function ProductForms({ onProductAdded }) {
     const [form, setForm] = React.useState({ title: '', price: '', description: '', image: '' });

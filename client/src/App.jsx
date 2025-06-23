@@ -1,8 +1,8 @@
 import React from 'react';
 import './App.css'
-import ProductForms from './components/ProductForms'
-import ProductCards from './components/ProductCards';
-import ProductInfo from './components/ProductInfo';
+import ProductForms from './components/Products/ProductForms'
+import ProductCards from './components/Products/ProductCards';
+import ProductInfo from './components/Products/ProductInfo';
 
 function App() {
   const [tab, setTab] = React.useState(0);

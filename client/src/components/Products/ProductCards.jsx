@@ -1,5 +1,5 @@
 import React from 'react';
-import { getProducts, deleteProduct } from '../services/api';
+import { getProducts, deleteProduct } from '../../services/api';
 
 function ProductCards( {onReadMore} ) {
     const [products, setProducts] = React.useState([]);
