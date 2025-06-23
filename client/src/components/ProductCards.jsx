@@ -1,7 +1,7 @@
 import React from 'react';
 import { getProducts, deleteProduct } from '../services/api';
 
-function ProductCards() {
+function ProductCards( {onReadMore} ) {
     const [products, setProducts] = React.useState([]);
     const [reloadTrigger, setReloadTrigger] = React.useState(false);
 
@@ -9,6 +9,7 @@ function ProductCards() {
         try {
             const response = await getProducts();
             setProducts(response.data);
+            setReloadTrigger((prevTrigger) => !prevTrigger);
         } catch (error) {
             alert('Error fetching products');
             console.error('Error fetching products:', error);
@@ -56,6 +57,14 @@ function ProductCards() {
                         >
                             Delete
                         </button>
+                        {onReadMore && (
+                            <button
+                                onClick={() => onReadMore(product)}
+                                className="text-blue-600 hover:underline"
+                            >
+                                Read More →
+                            </button>
+                        )}
                     </div>
                 ))}
             </div>

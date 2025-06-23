@@ -6,9 +6,15 @@ import ProductInfo from './components/ProductInfo';
 
 function App() {
   const [tab, setTab] = React.useState(0);
+  const [ selectedProduct, setSelectedProduct] = React.useState(null);
   const handleTabChange = (newTab) => {
     setTab(newTab);
   };
+
+  const handleReadMore = (product) => {
+    setSelectedProduct(product);
+    setTab(3); // Switch to Product Info tab
+  }
 
   return (
     <>
@@ -26,8 +32,8 @@ function App() {
 
       <div>
         {tab === 1 && <ProductForms />}
-        {tab === 2 && <ProductCards />}
-        {tab === 3 && <ProductInfo />}
+        {tab === 2 && <ProductCards onReadMore={handleReadMore} />}
+        {tab === 3 && <ProductInfo product={selectedProduct} />}
       </div>
     </>
   )
