@@ -32,8 +32,27 @@ exports.getproducts = async (req, res) => {
     }
 }
 
+exports.getprodcutsById = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const product = await Product.findById(id);
+        if (!product) {
+            return res.status(404).json({
+                message: 'Product not found'
+            });
+        }
+        res.status(200).json(product);
+    } catch (error) {
+        res.status(500).json({
+            message: 'Error fetching product',
+            error: error.message
+        });
+    }
+}
+
 exports.deleteproduct = async (req, res) => {
-    const { Pid } = req.params;
+    const { id } = req.params;
 
     try {
         const product = await Product.findByIdAndDelete(id);

@@ -1,6 +1,9 @@
 import React from 'react'
+import 
 
 function ProductInfo() {
+
+
     return (
         <div>
             <div class="text-left inline-flex p-4 max-w-sm lg:max-w-full bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">

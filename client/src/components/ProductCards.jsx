@@ -3,6 +3,7 @@ import { getProducts, deleteProduct } from '../services/api';
 
 function ProductCards() {
     const [products, setProducts] = React.useState([]);
+    const [reloadTrigger, setReloadTrigger] = React.useState(false);
 
     const fetchProducts = async () => {
         try {
@@ -13,26 +14,28 @@ function ProductCards() {
             console.error('Error fetching products:', error);
         }
     };
-
-    React.useEffect(() => {
-        fetchProducts();
-    }, []); // Correct dependency array placement
+    // Correct dependency array placement
 
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this product?')) {
             try {
                 await deleteProduct(id);
                 // Use functional update to ensure latest state
+                setReloadTrigger((prevTrigger) => !prevTrigger);
                 setProducts((prevProducts) =>
                     prevProducts.filter((product) => product._id !== id)
                 );
                 alert('Product deleted successfully');
             } catch (error) {
-                alert('Error deleting product');
+                alert('Error deleting product, Still working on it');
                 console.error('Error deleting product:', error);
             }
         }
     };
+
+    React.useEffect(() => {
+        fetchProducts();
+    }, [reloadTrigger]);
 
     return (
         <div>
