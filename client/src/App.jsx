@@ -1,42 +1,103 @@
-import React from 'react';
-import './App.css'
-import ProductForms from './components/Products/ProductForms'
+import React, { useEffect } from 'react';
+import './App.css';
+import ProductForms from './components/Products/ProductForms';
 import ProductCards from './components/Products/ProductCards';
 import ProductInfo from './components/Products/ProductInfo';
+import Register from './components/User/Register';
+import Login from './components/User/Login';
 
 function App() {
   const [tab, setTab] = React.useState(0);
-  const [ selectedProduct, setSelectedProduct] = React.useState(null);
+  const [selectedProduct, setSelectedProduct] = React.useState(null);
+  const [user, setUser] = React.useState(null);
+
+  // Load user from localStorage on first render
+  useEffect(() => {
+    const storedUser = localStorage.getItem('fshipping_user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+      setTab(2); // default to product list if logged in
+    }
+  }, []);
+
   const handleTabChange = (newTab) => {
     setTab(newTab);
   };
 
   const handleReadMore = (product) => {
     setSelectedProduct(product);
-    setTab(3); // Switch to Product Info tab
+    setTab(3);
+  };
+
+  const handleLogin = (userInfo) => {
+    setUser(userInfo);
+    localStorage.setItem('fshipping_user', JSON.stringify(userInfo));
+    setTab(2); // redirect to product list after login
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    localStorage.removeItem('fshipping_user');
+    setTab(0);
+  };
+
+  if (!user) {
+    return (
+      <div className="p-6 max-w-md mx-auto">
+        <Register />
+        <Login onLogin={handleLogin} />
+      </div>
+    );
   }
 
   return (
     <>
-      <ul className="font-medium flex flex-col p-4 lg:p-4 md:p-0 mt-4 border cursor-pointer border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+      {/* Nav */}
+      <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border cursor-pointer border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white bg-gray-800 md:bg-gray-900 border-gray-700">
+        {user.role === 'admin' && (
+          <li>
+            <a
+              onClick={() => handleTabChange(1)}
+              className="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent  md:p-0  md:text-blue-500"
+            >
+              Product Form
+            </a>
+          </li>
+        )}
         <li>
-          <a onClick={() => { handleTabChange(1) }} className="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500" aria-current="page">Product Form</a>
+          <a
+            onClick={() => handleTabChange(2)}
+            className="block py-2 px-3 text-gray-900 hover:text-blue-600"
+          >
+            Product List
+          </a>
         </li>
         <li>
-          <a onClick={() => { handleTabChange(2) }} className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Product List</a>
+          <a
+            onClick={() => handleTabChange(3)}
+            className="block py-2 px-3 text-gray-900 hover:text-blue-600"
+          >
+            Product Info
+          </a>
         </li>
-        <li>
-          <a onClick={() => { handleTabChange(3) }} className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Product Info</a>
+        <li className="ml-auto">
+          <button
+            onClick={handleLogout}
+            className="bg-red-600 hover:bg-red-700  py-1 px-4 rounded"
+          >
+            Logout
+          </button>
         </li>
       </ul>
 
+      {/* Views */}
       <div>
-        {tab === 1 && <ProductForms />}
-        {tab === 2 && <ProductCards onReadMore={handleReadMore} />}
-        {tab === 3 && <ProductInfo product={selectedProduct} />}
+        {tab === 1 && user.role === 'admin' && <ProductForms />}
+        {tab === 2 && <ProductCards user={user} onReadMore={handleReadMore} />}
+        {tab === 3 && <ProductInfo product={selectedProduct} user={user} />}
       </div>
     </>
-  )
+  );
 }
 
 export default App;
