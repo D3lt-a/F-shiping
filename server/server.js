@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const path = require('path');
 
 const ProductRoutes = require('./routes/ProductRoutes');
 const OrderRoutes = require('./routes/OrderRoutes');
@@ -13,6 +14,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/orders', OrderRoutes);
 app.use('/products', ProductRoutes);
 app.use('/auth', authRoutes);

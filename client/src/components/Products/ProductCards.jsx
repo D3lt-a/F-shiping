@@ -39,7 +39,7 @@ function ProductCards({ onReadMore, user }) {
                 {products.map((product) => (
                     <div key={product._id} className="bg-white rounded-xl shadow-md p-4 space-y-3">
                         <img
-                            src={product.image}
+                            src={`http://localhost:3000${product.image}`}
                             alt={product.title}
                             className="w-full h-48 object-cover rounded-md"
                         />

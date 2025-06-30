@@ -23,7 +23,7 @@ function ProductInfo({ product, user }) {
     return (
         <div className="p-6 max-w-xl mx-auto bg-white rounded-lg shadow">
             <img
-                src={product.image}
+                src={`http://localhost:3000${product.image}`}
                 alt={product.title}
                 className="w-full h-64 object-cover rounded"
             />

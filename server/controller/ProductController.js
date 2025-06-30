@@ -1,24 +1,33 @@
 const Product = require('../models/Product');
 
+const multer = require('multer');
+const path = require('path');
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'images/'); // make sure this folder exists
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname)); // unique file name
+    },
+});
+
+const image = multer({ storage });
+
+
 exports.creatproduct = async (req, res) => {
-    const { title, description, image, price, ordered } = req.body;
-
     try {
-        const product = new Product({ title, description, image, price, ordered })
-        await product.save();
+        const { title, price, description } = req.body;
+        const image = req.file ? `/images/${req.file.filename}` : '';
 
-        res.status(201).json({
-            message: 'Product created successfully',
-            product
-        });
-        
-    } catch (error) {
-        res.status(500).json({
-            message: 'Error creating product',
-            error: error.message
-        });
+        const newProduct = new Product({ title, price, description, image });
+        await newProduct.save();
+        res.status(201).json({ message: 'Product created successfully', product: newProduct });
+    } catch (err) {
+        console.error('Error creating product:', err);
+        res.status(500).json({ message: 'Server error' });
     }
-}
+};
 
 exports.getproducts = async (req, res) => {
     try {
@@ -72,3 +81,5 @@ exports.deleteproduct = async (req, res) => {
         });
     }
 }
+
+module.exports.image = image;

@@ -7,6 +7,12 @@ import { login } from '../../services/api'
     password : customer3pass
 */
 
+/* 
+    usename : Admin1
+    email : ripdelta54@gmail.com
+    password : Blog_admin123
+*/
+
 function Login({ onLogin }) {
     const [form, setForm] = useState({ email: '', password: '' });
 

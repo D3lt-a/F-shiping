@@ -5,6 +5,7 @@ import ProductCards from './components/Products/ProductCards';
 import ProductInfo from './components/Products/ProductInfo';
 import Register from './components/User/Register';
 import Login from './components/User/Login';
+import AdminOrderPanel from './components/AdminOrderPanle';
 
 function App() {
   const [tab, setTab] = React.useState(0);
@@ -53,7 +54,7 @@ function App() {
   return (
     <>
       {/* Nav */}
-      <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border cursor-pointer border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white bg-gray-800 md:bg-gray-900 border-gray-700">
+      <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border cursor-pointer border-gray-100 rounded-lg  md:flex-row md:space-x-8 md:mt-0 md:border-0  bg-gray-800 md:bg-gray-900 ">
         {user.role === 'admin' && (
           <li>
             <a
@@ -80,6 +81,16 @@ function App() {
             Product Info
           </a>
         </li>
+        {user.role === 'admin' && (
+          <li>
+            <a
+              onClick={() => handleTabChange(4)}
+              className="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent  md:p-0  md:text-blue-500"
+            >
+              Orders Report
+            </a>
+          </li>
+        )}
         <li className="ml-auto">
           <button
             onClick={handleLogout}
@@ -95,6 +106,7 @@ function App() {
         {tab === 1 && user.role === 'admin' && <ProductForms />}
         {tab === 2 && <ProductCards user={user} onReadMore={handleReadMore} />}
         {tab === 3 && <ProductInfo product={selectedProduct} user={user} />}
+        {tab === 4 && user.role === 'admin' && <AdminOrderPanel />}
       </div>
     </>
   );

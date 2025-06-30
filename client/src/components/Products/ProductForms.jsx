@@ -9,25 +9,28 @@ function ProductForms({ onProductAdded }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!form.title || !form.price || !form.description || !form.image) {
-            alert("Please fill in all fields");
-            // console.error("Please fill in all fields");
-            return;
-        }
+        const formData = new FormData();
+
+        formData.append('title', form.title);
+        formData.append('price', form.price);
+        formData.append('description', form.description);
+        formData.append('image', form.image); // actual file
+
         try {
-            const response = await createProduct(form);
-            setForm({
-                title: '',
-                price: '',
-                image: '',
-                description: ''
-            });
-            onProductAdded?.();
-            alert('Product created successfully');
+            await createProduct(formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+            alert('Product created successfully!');
+            setForm({ title: '', price: '', description: '', image: '' });
+            onProductAdded && onProductAdded();
         } catch (error) {
             console.error('Error creating product:', error);
-            alert('Error creating product');
-        }}
+            alert('Error imageing product');
+        }
+    };
+
 
 
     return (
@@ -63,10 +66,11 @@ function ProductForms({ onProductAdded }) {
                     <label htmlFor="image" className="block text-sm font-medium text-gray-600 mb-1">Image URL</label>
                     <input
                         id="image"
+                        type="file"
                         name="image"
-                        placeholder="Enter image URL"
-                        value={form.image}
-                        onChange={handleChange}
+                        accept="image/*"
+                        // value={form.image}
+                        onChange={(e) => setForm({ ...form, image: e.target.files[0] })}
                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                 </div>

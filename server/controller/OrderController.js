@@ -9,6 +9,7 @@ exports.placeOrder = async (req, res) => {
         const newOrder = new Orders({
             Pid,
             title: productTitle,
+            cusEmail: customerEmail,
             orderedAt: orderedAt || Date.now(), // Use current date if not provided
         });
 
