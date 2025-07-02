@@ -11,7 +11,9 @@ const mongoose = require('mongoose');
 const productSchema = new mongoose.Schema({
     Pid : mongoose.Schema.Types.ObjectId,
     title: String,
+    cusName: String,
     cusEmail: String,
+    cusNumber: String,
     orderedAt : {
         type: Date,
         default: Date.now

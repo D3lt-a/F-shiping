@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const JWT_SECRET = process.env.JWT_SECRET || 'fshiping_secret_key';
 
 exports.register = async (req, res) => {
-    const { username, email, password, role } = req.body;
+    const { username, email, password, number, role } = req.body;
 
     try {
         // Check if admin already exists
@@ -21,7 +21,7 @@ exports.register = async (req, res) => {
             return res.status(400).json({ msg: 'Email already in use' });
         }
 
-        const user = new User({ username, email, password, role });
+        const user = new User({ username, email, password, number, role });
         await user.save();
 
         const token = jwt.sign(
@@ -30,7 +30,16 @@ exports.register = async (req, res) => {
             { expiresIn: '1d' }
         );
 
-        res.status(201).json({ token, user: { id: user._id, username: user.username, role: user.role } });
+        res.status(200).json({
+            token,
+            user: {
+                _id: user._id,
+                username: user.username,
+                email: user.email,
+                number: user.number, 
+                role: user.role,
+            }
+        });
     } catch (err) {
         console.error(err);
         res.status(500).json({ msg: 'Server error' });
@@ -67,6 +76,7 @@ exports.login = async (req, res) => {
                 id: user._id,
                 username: user.username,
                 email: user.email,
+                number: user.number,
                 role: user.role
             }
         });
